@@ -19,17 +19,29 @@ function encryptForSeed(text: string): string {
 async function main() {
   // 1. Admin-User anlegen
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@schule.test' },
-    update: {},
+    where: { email: 'admin' },
+    update: {
+      passwordHash: bcrypt.hashSync('admin', 10),
+    },
     create: {
-      name: 'Anna Admin',
-      email: 'admin@schule.test',
-      passwordHash: bcrypt.hashSync('testpasswort123', 10),
+      name: 'System Admin',
+      email: 'admin',
+      passwordHash: bcrypt.hashSync('admin', 10),
       role: 'ADMIN',
     },
   })
 
-  // 2. Lehrer anlegen
+  // 2. Klassen anlegen (Wichtig für Foreign Keys)
+  const classes = ["3a", "3b", "4a", "4b", "DAZ"];
+  for (const classId of classes) {
+    await prisma.schoolClass.upsert({
+      where: { id: classId },
+      update: {},
+      create: { id: classId },
+    });
+  }
+
+  // 3. Lehrer anlegen
   const teacher = await prisma.user.upsert({
     where: { email: 'lehrer@schule.test' },
     update: {},
@@ -41,73 +53,80 @@ async function main() {
     },
   })
 
-  // 3. Schüler anlegen
-  const schueler1 = await prisma.student.create({
-    data: {
-      firstName: 'Lena',
-      lastName: 'Schulze',
-      internalId: 'SCH-2024-001',
-      classId: '3a',
-      birthYear: 2016,
-      status: 'Regelschülerin',
-    },
+  // 4. Schüler anlegen (Idempotent via upsert mit internalId als Key falls vorhanden, sonst firstName/lastName Kombination)
+  // Da Student kein einfaches Unique Feld für den Seed hat, nutzen wir findFirst + create
+  const createStudentIfMissing = async (data: any) => {
+    const existing = await prisma.student.findFirst({
+      where: { firstName: data.firstName, lastName: data.lastName }
+    });
+    if (existing) return existing;
+    return await prisma.student.create({ data });
+  }
+
+  const schueler1 = await createStudentIfMissing({
+    firstName: 'Lena',
+    lastName: 'Schulze',
+    internalId: 'SCH-2024-001',
+    classId: '3a',
+    birthYear: 2016,
+    status: 'Regelschülerin',
   })
 
-  const schueler2 = await prisma.student.create({
-    data: {
-      firstName: 'Tim',
-      lastName: 'Berger',
-      internalId: 'SCH-2024-002',
-      classId: '3a',
-      birthYear: 2015,
-      status: 'LRS-Förderung',
-    },
+  const schueler2 = await createStudentIfMissing({
+    firstName: 'Tim',
+    lastName: 'Berger',
+    internalId: 'SCH-2024-002',
+    classId: '3a',
+    birthYear: 2015,
+    status: 'LRS-Förderung',
   })
 
-  // 4. Zugriff zuweisen
-  await prisma.teacherStudentAccess.createMany({
-    data: [
-      { teacherId: teacher.id, studentId: schueler1.id, subject: 'Klassenlehrerin' },
-      { teacherId: teacher.id, studentId: schueler2.id, subject: 'Klassenlehrerin' },
-    ],
-  })
+  // 5. Zugriff zuweisen (Idempotent)
+  await prisma.teacherStudentAccess.upsert({
+    where: { teacherId_studentId: { teacherId: teacher.id, studentId: schueler1.id } },
+    update: {},
+    create: { teacherId: teacher.id, studentId: schueler1.id, subject: 'Klassenlehrerin' }
+  });
 
-  // 5. Beispiel-Logs anlegen
-  const log1 = await prisma.learningLog.create({
-    data: {
-      studentId: schueler1.id,
-      teacherId: teacher.id,
-      content: encryptForSeed('Lena zeigt große Fortschritte im Leseverständnis. Sie kann nun kurze Texte selbstständig zusammenfassen.'),
-      category: 'Deutsch',
-    },
-  })
+  await prisma.teacherStudentAccess.upsert({
+    where: { teacherId_studentId: { teacherId: teacher.id, studentId: schueler2.id } },
+    update: {},
+    create: { teacherId: teacher.id, studentId: schueler2.id, subject: 'Klassenlehrerin' }
+  });
 
-  await prisma.logAudit.create({
-    data: {
-      logId: log1.id,
-      teacherId: teacher.id,
-      action: 'CREATE',
-      newContent: log1.content,
-    },
-  })
+  // 6. Beispiel-Logs anlegen (Idempotent)
+  const createLogIfMissing = async (studentId: string, teacherId: string, content: string, category: string) => {
+    const existing = await prisma.learningLog.findFirst({
+      where: { studentId, category, content: encryptForSeed(content) }
+    });
+    // This is a bit tricky due to encryption changing the string every time.
+    // For simplicity in seed, we just check if any log exists for this student/category as a proxy.
+    const anyExisting = await prisma.learningLog.findFirst({ where: { studentId, category } });
+    if (anyExisting) return anyExisting;
+    
+    const log = await prisma.learningLog.create({
+      data: { studentId, teacherId, content: encryptForSeed(content), category }
+    });
 
-  const log2 = await prisma.learningLog.create({
-    data: {
-      studentId: schueler2.id,
-      teacherId: teacher.id,
-      content: encryptForSeed('Tim benötigt weiterhin Unterstützung bei der Rechtschreibung. Die LRS-Förderung zeigt aber erste Wirkung.'),
-      category: 'Deutsch',
-    },
-  })
+    await prisma.logAudit.create({
+      data: { logId: log.id, teacherId, action: 'CREATE', newContent: log.content }
+    });
+    return log;
+  }
 
-  await prisma.logAudit.create({
-    data: {
-      logId: log2.id,
-      teacherId: teacher.id,
-      action: 'CREATE',
-      newContent: log2.content,
-    },
-  })
+  await createLogIfMissing(
+    schueler1.id, 
+    teacher.id, 
+    'Lena zeigt große Fortschritte im Leseverständnis. Sie kann nun kurze Texte selbstständig zusammenfassen.', 
+    'Deutsch'
+  );
+
+  await createLogIfMissing(
+    schueler2.id, 
+    teacher.id, 
+    'Tim benötigt weiterhin Unterstützung bei der Rechtschreibung. Die LRS-Förderung zeigt aber erste Wirkung.', 
+    'Deutsch'
+  );
 
   console.log('✅ Seed abgeschlossen!')
   console.log(`   Admin: admin@schule.test / testpasswort123`)
