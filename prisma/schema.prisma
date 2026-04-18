@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String                 @id @default(cuid())
+  name           String?
+  email          String?                @unique
+  passwordHash   String?
+  role           Role                   @default(TEACHER)
+  isActive       Boolean                @default(true)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  assessments    Assessment[]
+  learningLogs   LearningLog[]
+  logAudits      LogAudit[]
+  notes          Note[]
+  teacherAccess  TeacherStudentAccess[]
+  managedClasses SchoolClass[]          @relation("TeacherClasses")
+}
+
+model SchoolClass {
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  students  Student[]
+  teachers  User[]    @relation("TeacherClasses")
+}
+
+model Student {
+  id            String                 @id @default(cuid())
+  firstName     String
+  lastName      String
+  internalId    String?
+  classId       String?
+  birthYear     Int?
+  status        String?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  assessments   Assessment[]
+  learningLogs  LearningLog[]
+  notes         Note[]
+  schoolClass   SchoolClass?           @relation(fields: [classId], references: [id])
+  teacherAccess TeacherStudentAccess[]
+  tags          StudentTag[]           @relation("StudentToStudentTag")
+}
+
+model TeacherStudentAccess {
+  id        String   @id @default(cuid())
+  teacherId String
+  studentId String
+  subject   String?
+  createdAt DateTime @default(now())
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  teacher   User     @relation(fields: [teacherId], references: [id])
+
+  @@unique([teacherId, studentId])
+  @@index([teacherId])
+  @@index([studentId])
+}
+
+model LearningLog {
+  id        String     @id @default(cuid())
+  studentId String
+  teacherId String
+  content   String
+  category  String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  teacher   User       @relation(fields: [teacherId], references: [id])
+  student   Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  audits    LogAudit[]
+
+  @@index([studentId])
+  @@index([teacherId])
+}
+
+model LogAudit {
+  id              String      @id @default(cuid())
+  logId           String
+  teacherId       String
+  action          String
+  previousContent String?
+  newContent      String?
+  timestamp       DateTime    @default(now())
+  teacher         User        @relation(fields: [teacherId], references: [id])
+  log             LearningLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+
+  @@index([logId])
+  @@index([teacherId])
+}
+
+model StudentTag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  color     String    @default("blue-500")
+  createdAt DateTime  @default(now())
+  students  Student[] @relation("StudentToStudentTag")
+}
+
+model Assessment {
+  id           String   @id @default(cuid())
+  studentId    String
+  teacherId    String
+  category     String
+  value        String
+  intervention String?
+  quarter      String   @default("Q2_2026")
+  createdAt    DateTime @default(now())
+  teacher      User     @relation(fields: [teacherId], references: [id])
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, category, quarter])
+  @@index([studentId])
+  @@index([teacherId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  studentId String
+  teacherId String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  teacher   User     @relation(fields: [teacherId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([teacherId])
+}
+
+model GradeCriteria {
+  id         String   @id @default(cuid())
+  gradeLevel String   @unique
+  jsonSchema String
+  updatedAt  DateTime @updatedAt
+}
+
+model SystemSetting {
+  key   String @id
+  value String
+}
+
+model Quarter {
+  id        String   @id
+  name      String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+}
