@@ -1,11 +1,17 @@
-import { PrismaClient } from '@prisma/client'
-// Force re-init: 2026-04-17T16:25:00
-
+import 'server-only'
+import { createPrismaClient } from './prisma-init'
 import { initBackupScheduler } from './backups'
 
+
 const prismaClientSingleton = () => {
-  return new PrismaClient()
+  if (typeof window !== 'undefined') {
+    throw new Error('PrismaClient cannot be initialized on the client side.')
+  }
+  return createPrismaClient()
 }
+
+
+
 
 declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>

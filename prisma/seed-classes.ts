@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from '../src/lib/prisma';
+
 
 async function main() {
   const classes = ["3a", "3b", "4a", "4b", "DAZ"];

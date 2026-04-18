@@ -1,9 +1,12 @@
-import 'dotenv/config'
-import { PrismaClient } from '@prisma/client'
+import { createPrismaClient } from '../src/lib/prisma-init'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
+import 'dotenv/config'
 
-const prisma = new PrismaClient()
+const prisma = createPrismaClient()
+
+
+
 
 // Einfache Verschlüsselung für Seed-Daten
 function encryptForSeed(text: string): string {
@@ -139,5 +142,6 @@ main()
   .catch(async (e) => {
     console.error(e)
     await prisma.$disconnect()
+
     process.exit(1)
   })
