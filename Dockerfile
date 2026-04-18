@@ -12,7 +12,11 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Wir generieren hier den Client, damit er im Build verfügbar ist
+
+# Wir installieren ts-node lokal für den Build, damit Prisma die TS-Config lesen kann
+RUN npm install -D ts-node typescript
+
+# Wichtig: Die Variable muss exakt so gesetzt sein
 RUN DATABASE_URL="file:./dev.db" npx prisma generate
 RUN npm run build
 
