@@ -1,6 +1,12 @@
 services:
   app:
-      build: .
-      ports:
-        - "3000:3000"
-      restart: always
+    build: .
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      - DATABASE_URL=file:/app/data/dev.db
+      - NEXTAUTH_SECRET=dein_super_geheimes_wort_hier
+      - NEXTAUTH_URL=http://localhost:3000/
+    volumes:
+      - ./data:/app/data
