@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Wir generieren hier den Client, damit er im Build verfügbar ist
-RUN npx prisma generate
+RUN DATABASE_URL="file:./dev.db"npx prisma generate
 RUN npm run build
 
 # 3. Stage: Runner
