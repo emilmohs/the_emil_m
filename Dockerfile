@@ -3,22 +3,23 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package*.json ./
-COPY prisma ./prisma 
+COPY prisma ./prisma
+# Wichtig: Config für Prisma Generate kopieren
+COPY prisma.config.ts ./
 RUN npm install
-RUN npx prisma generate
+# Wichtig: DATABASE_URL als Platzhalter für Generate bereitstellen
+RUN DATABASE_URL="file:./dev.db" npx prisma generate
 
 # 2. Stage: Bauen
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-# Wir installieren ts-node lokal für den Build, damit Prisma die TS-Config lesen kann
-RUN npm install -D ts-node typescript
-
-# Wichtig: Die Variable muss exakt so gesetzt sein
+# npx prisma generate ist hier nun optional, da es in deps schon lief, 
+# aber wir führen es zur Sicherheit nochmal mit dem kompletten Code aus
 RUN DATABASE_URL="file:./dev.db" npx prisma generate
 RUN npm run build
+
 
 # 3. Stage: Runner
 FROM node:20-alpine AS runner
