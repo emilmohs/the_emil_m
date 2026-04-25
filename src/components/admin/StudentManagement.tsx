@@ -3,12 +3,12 @@ import StudentAccordion from "./StudentAccordion";
 import StudentForms from "./StudentForms";
 
 export default async function StudentManagement({ allClasses, allTags = [] }: { allClasses: {id: string}[], allTags?: any[] }) {
-  const classData = await Promise.all(
+  const classData = (await Promise.all(
     allClasses.map(async (c) => ({
       id: c.id,
       students: await getStudentsByClass(c.id)
     }))
-  );
+  )).sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' }));
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">

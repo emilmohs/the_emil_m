@@ -146,7 +146,10 @@ export async function getStudentsByClass(classId: string) {
   await ensureAdmin();
   return await prisma.student.findMany({
     where: { classId },
-    orderBy: { lastName: "asc" },
+    orderBy: [
+      { lastName: "asc" },
+      { firstName: "asc" }
+    ],
     include: { tags: true }
   });
 }
