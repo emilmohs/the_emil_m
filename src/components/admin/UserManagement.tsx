@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition, useState } from "react";
-import { createUser, toggleUserStatus, updateUserClasses, resetUserPassword } from "@/app/actions/user";
+import { createUser, toggleUserStatus, updateUserClasses, resetUserPassword, deleteUser } from "@/app/actions/user";
 
 interface UserManagementProps {
   users: any[];
@@ -158,6 +158,21 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
                   }`}
                 >
                   {selectedUser.isActive ? "Sperren" : "Aktivieren"}
+                </button>
+                <button 
+                  onClick={() => {
+                    if(confirm(`Möchtest du den Account von "${selectedUser.name}" wirklich unwiderruflich löschen?`)) {
+                      startTransition(async () => {
+                        const res = await deleteUser(selectedUser.id);
+                        if (res.error) alert(res.error);
+                        else setSelectedUserId(null);
+                      });
+                    }
+                  }}
+                  disabled={isPending}
+                  className="flex-1 sm:flex-none px-4 py-2 text-xs md:text-sm font-bold rounded-xl transition-all shadow-sm disabled:opacity-50 bg-red-600 text-white hover:bg-red-700"
+                >
+                  Löschen
                 </button>
               </div>
             </div>

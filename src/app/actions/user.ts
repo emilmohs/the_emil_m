@@ -79,6 +79,24 @@ export async function toggleUserStatus(userId: string, active: boolean) {
 }
 
 /**
+ * Server Action: Löscht einen Benutzer-Account endgültig.
+ */
+export async function deleteUser(userId: string) {
+  await ensureAdmin();
+
+  try {
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (error) {
+    console.error("Fehler beim Löschen des Benutzers:", error);
+    return { error: "Fehler beim Löschen des Benutzers" };
+  }
+}
+
+/**
  * Server Action: Setzt das Passwort eines Benutzers zurück.
  */
 export async function resetUserPassword(userId: string) {
