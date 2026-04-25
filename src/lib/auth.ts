@@ -69,6 +69,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        if (!user.isActive) {
+          console.log("[AUTH] User account is locked:", credentials.username);
+          return null;
+        }
+
         const isPasswordValid = await bcrypt.compare(credentials.password, user.passwordHash);
 
         if (!isPasswordValid) {
@@ -87,9 +92,27 @@ export const authOptions: NextAuthOptions = {
         token.sub = user.id;
         token.role = (user as any).role;
       }
+
+      // Bei jedem Request prüfen, ob der Account noch aktiv ist
+      if (token.sub) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { isActive: true, role: true },
+        });
+        if (!dbUser || !dbUser.isActive) {
+          // Token ungültig machen → erzwingt Logout
+          return { ...token, isBlocked: true };
+        }
+        token.role = dbUser.role;
+      }
+
       return token;
     },
     async session({ session, token }) {
+      // Gesperrte User bekommen keine gültige Session
+      if ((token as any).isBlocked) {
+        return { ...session, user: undefined } as any;
+      }
       if (session.user && token.sub) {
         (session.user as any).id = token.sub;
         (session.user as any).role = token.role;
