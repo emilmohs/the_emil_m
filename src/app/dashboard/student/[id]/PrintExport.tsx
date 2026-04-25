@@ -150,23 +150,23 @@ export default function PrintExport({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 flex flex-col gap-6">
+    <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-4 md:p-6 flex flex-col gap-5 md:gap-6">
       <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 border-b border-gray-100 pb-4">
         <div>
           <h3 className="text-lg font-bold text-gray-900">Export & Drucken</h3>
           <p className="text-xs text-gray-500">Generiere Berichte oder vergleiche Quartale.</p>
         </div>
         
-        <div className="flex bg-gray-100 rounded-xl p-1 w-fit">
+        <div className="flex bg-gray-100 rounded-xl p-1 w-full lg:w-fit">
           <button 
             onClick={() => setExportMode("single")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "single" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`flex-1 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "single" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
             Einzel-Quartal
           </button>
           <button 
             onClick={() => setExportMode("compare")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "compare" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`flex-1 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "compare" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
             Vergleich
           </button>
@@ -198,7 +198,7 @@ export default function PrintExport({
         )}
 
         {exportMode === "single" ? (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <button onClick={() => handlePrint("full")} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-bold text-xs transition-colors">Voll-Profil</button>
             <button onClick={() => handlePrint("intervention")} className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-xl font-bold text-xs transition-colors">Förderung</button>
           </div>

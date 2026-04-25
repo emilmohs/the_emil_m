@@ -102,12 +102,12 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 text-black">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
+      <header className="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-4">
           <img 
             src="/novum/Logo_full_Novum.png" 
             alt="Novum Logo" 
-            className="h-10 w-auto"
+            className="h-8 sm:h-10 w-auto"
           />
           <div className="hidden sm:block h-6 w-px bg-gray-200 mx-1" />
           <div className="hidden sm:block">
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto p-6 lg:p-10">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-10">
         {/* Admin Quick Actions Area */}
         {isAdmin && (
           <section className="mb-10">
@@ -203,7 +203,7 @@ export default async function DashboardPage() {
                 return (
                   <div
                     key={student.id}
-                    className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-xl transition-all relative block group"
+                    className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 hover:shadow-xl transition-all relative block group"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <Link href={`/dashboard/student/${student.id}`} className="block flex-1 cursor-pointer">
@@ -217,7 +217,7 @@ export default async function DashboardPage() {
                              </span>
                           ))}
                         </div>
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                           <span className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">
                             Klasse {student.classId || String.fromCharCode(8211)}
                           </span>

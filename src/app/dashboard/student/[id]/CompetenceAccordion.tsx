@@ -151,7 +151,7 @@ export default function CompetenceAccordion({
 
   return (
     <div className="space-y-6 mt-8">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-3 md:p-4 rounded-2xl border border-gray-200">
         <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">🎯</span>
           Novum Dokumentation
@@ -186,16 +186,16 @@ export default function CompetenceAccordion({
             <div key={subject} className="bg-white border text-black border-gray-200 rounded-2xl overflow-hidden shadow-sm">
               <button 
                 onClick={() => setTab(isOpen ? "" : subject)}
-                className={`w-full px-6 py-4 flex justify-between items-center transition-colors ${isOpen ? 'bg-indigo-50 border-b border-indigo-100' : 'hover:bg-gray-50'}`}
+                className={`w-full px-4 py-3 md:px-6 md:py-4 flex justify-between items-center transition-colors ${isOpen ? 'bg-indigo-50 border-b border-indigo-100' : 'hover:bg-gray-50'}`}
               >
-                <span className="font-bold text-lg text-gray-800">{subject}</span>
+                <span className="font-bold text-base md:text-lg text-gray-800">{subject}</span>
                 <svg className={`w-5 h-5 transform transition-transform duration-200 ${isOpen ? 'rotate-180 text-indigo-600' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               
               {isOpen && (
-                <div className="p-6 space-y-8 animate-in slide-in-from-top-2 duration-300">
+                <div className="p-4 md:p-6 space-y-6 md:space-y-8 animate-in slide-in-from-top-2 duration-300">
                   {Object.entries(categories).map(([category, items]) => (
                     <div key={category} className="space-y-5">
                       {category !== "Allgemein" && <h4 className="font-bold text-indigo-600 border-b border-indigo-100 pb-2 bg-indigo-50/30 px-3 py-1 rounded-t-lg">{category}</h4>}
@@ -208,7 +208,7 @@ export default function CompetenceAccordion({
                           const isSaving = savingKeys[key];
 
                           return (
-                            <div key={key} className={`flex flex-col gap-3 p-5 rounded-2xl border shadow-sm relative overflow-hidden transition-colors ${
+                            <div key={key} className={`flex flex-col gap-3 p-4 md:p-5 rounded-2xl border shadow-sm relative overflow-hidden transition-colors ${
                                isUntouched ? "bg-gray-50 border-gray-200 opacity-80 grayscale-[30%]" 
                                : isCritical ? "bg-red-50 border-red-200" 
                                : "bg-green-50 border-green-200"

@@ -93,7 +93,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
   return (
     <div className="min-h-screen bg-gray-50 text-slate-800">
       {/* Header Snippet */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
+      <header className="bg-white border-b border-gray-200 px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
         <div className="flex items-center gap-4">
           <Link href="/dashboard" className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors">
             <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,12 +107,12 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto p-6 md:p-10">
+      <main className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10">
         
         {/* Detail Card */}
-        <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-8 mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
+        <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5 md:p-8 mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
           <div>
-            <h2 className="text-3xl font-black text-gray-900 mb-2">
+            <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">
               {student.firstName} {student.lastName}
             </h2>
             <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -141,7 +141,7 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <div className="space-y-12 max-w-4xl mx-auto">
+        <div className="space-y-8 md:space-y-12 max-w-4xl mx-auto">
           <PrintExport 
             student={{ id: student.id, firstName: student.firstName, lastName: student.lastName, classId: student.classId }} 
             teacherName={(session.user as any)?.name || "Unbekannt"} 
