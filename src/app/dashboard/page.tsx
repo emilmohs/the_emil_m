@@ -7,6 +7,7 @@ import LogoutButton from "@/components/LogoutButton";
 import ChangePasswordForm from "@/components/ChangePasswordForm";
 import Link from "next/link";
 import { getTagColor } from "@/lib/colors";
+import DashboardClassAccordion from "@/components/dashboard/DashboardClassAccordion";
 
 export default async function DashboardPage() {
   // SERVER-SIDE DOUBLE-LOCK: Sofortige Prüfung der Session
@@ -192,68 +193,26 @@ export default async function DashboardPage() {
               <p className="text-gray-400 font-medium">Keine Schülerprofile gefunden.</p>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-2 gap-6">
-              {students.map((student: any) => {
-                const gradeLevel = student.classId ? student.classId.replace(/[^0-9]/g, '') : "1";
-                const totalCriteria = criteriaCounts[gradeLevel] || 23;
-                const percentage = Math.round((student.assessments?.length || 0) / totalCriteria * 100);
-
-                console.log(`[Progress Debug] Student: ${student.firstName}, Grade: ${gradeLevel}, Ass: ${student.assessments?.length}, Total: ${totalCriteria}, %: ${percentage}`);
-
-                return (
-                  <div
-                    key={student.id}
-                    className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-6 hover:shadow-xl transition-all relative block group"
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <Link href={`/dashboard/student/${student.id}`} className="block flex-1 cursor-pointer">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                            {student.firstName} {student.lastName}
-                          </h3>
-                          {student.tags?.map((t: any) => (
-                             <span key={t.id} style={{ backgroundColor: getTagColor(t.color) }} className="text-white px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase flex items-center shadow-sm">
-                               {t.name}
-                             </span>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap items-center gap-2 mt-2">
-                          <span className="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">
-                            Klasse {student.classId || String.fromCharCode(8211)}
-                          </span>
-                          <span className="text-[10px] text-gray-400">ID: {student.internalId || String.fromCharCode(8211)}</span>
-                        </div>
-                        
-                        <div className="mt-4">
-                          <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 mb-1 uppercase tracking-wider">
-                            <span>{currentQuarter.replace('_', ' ')} Dokumentation</span>
-                            <span className={percentage === 100 ? "text-green-600" : "text-gray-500"}>
-                              {percentage}%
-                            </span>
-                          </div>
-                          <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                            <div 
-                              className={`h-1.5 rounded-full transition-all ${percentage === 100 ? 'bg-green-500' : 'bg-indigo-500'}`} 
-                              style={{ width: `${Math.min(100, percentage)}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      </Link>
-                      <div className="flex gap-2">
-                        <a
-                          href={`/api/students/${student.id}/export?format=json`}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="DSGVO-Export"
-                        >
-                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                        </a>
-                      </div>
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
+            <DashboardClassAccordion 
+              groups={Object.entries(
+                students.reduce((acc: Record<string, any[]>, student: any) => {
+                  const cid = student.classId || "Ohne Klasse";
+                  if (!acc[cid]) acc[cid] = [];
+                  acc[cid].push(student);
+                  return acc;
+                }, {} as Record<string, any[]>)
+              )
+              .map(([classId, classStudents]: [string, any[]]) => ({
+                classId: classId === "Ohne Klasse" ? "" : classId,
+                students: classStudents.sort((a: any, b: any) => {
+                  const lastCmp = a.lastName.localeCompare(b.lastName);
+                  return lastCmp !== 0 ? lastCmp : a.firstName.localeCompare(b.firstName);
+                })
+              }))
+              .sort((a, b) => a.classId.localeCompare(b.classId, undefined, { numeric: true, sensitivity: 'base' }))} 
+              criteriaCounts={criteriaCounts}
+              currentQuarter={currentQuarter}
+            />
           )}
         </section>
       </main>
