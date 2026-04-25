@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, useEffect, useTransition } from "react";
-import { upsertAssessment } from "@/app/actions/assessments";
+import { upsertAssessment, deleteAssessment } from "@/app/actions/assessments";
 import type { CompetenceStructure } from "@/lib/competences";
 
 type AssessmentProp = { category: string, value: string, intervention: string | null, quarter: string };
@@ -122,14 +122,29 @@ export default function CompetenceAccordion({
 
   const handleSliderCommit = (key: string) => {
     const val = ratings[key];
-    if (val !== undefined && val !== 5) {
+    if (val === 5) {
+      deleteFromDb(key);
+    } else if (val !== undefined) {
       saveToDb(key, val, interventions[key]);
     }
   };
 
+  const deleteFromDb = async (key: string) => {
+    setSavingKeys(prev => ({ ...prev, [key]: true }));
+    try {
+      await deleteAssessment(studentId, key, activeQuarter);
+    } catch (e) {
+      console.error(e);
+    }
+    setSavingKeys(prev => ({ ...prev, [key]: false }));
+    router.refresh();
+  };
+
   const handleInterventionBlur = (key: string) => {
     const val = ratings[key];
-    if (val !== undefined && val < 5 && val !== 5) {
+    if (val === 5) {
+      deleteFromDb(key);
+    } else if (val !== undefined && val < 5) {
       saveToDb(key, val, interventions[key]);
     }
   };
@@ -139,7 +154,7 @@ export default function CompetenceAccordion({
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-4 rounded-2xl border border-gray-200">
         <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">🎯</span>
-          ILE Dokumentation
+          Novum Dokumentation
         </h3>
         <div className="flex items-center gap-3">
           <select 

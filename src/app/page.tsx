@@ -8,11 +8,12 @@ export default function LandingPage() {
       {/* Navbar Option */}
       <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-              I
-            </div>
-            <span className="font-bold text-xl tracking-tight text-slate-900">ILE</span>
+          <div className="flex items-center gap-3">
+            <img 
+              src="/novum/Logo_full_Novum.png" 
+              alt="Novum Logo" 
+              className="h-10 w-auto"
+            />
           </div>
           <div className="flex items-center gap-4">
             <Link 
@@ -43,72 +44,85 @@ export default function LandingPage() {
             Das Digitale Klassenbuch
           </div>
           
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
-            Individuelle Lernentwicklung <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-teal-500">
-              einfach dokumentiert
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+            Gemeinsam die <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-emerald-600">
+              Entwicklung begleiten
             </span>
           </h1>
           
           <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed mt-6">
-            Spare wertvolle Zeit im Schulalltag. 100% Datenschutzkonform, Fokus auf den Schüler, und sichere Planung in einer modernen Plattform.
+            Novum ist die digitale Plattform unserer Schule zur Dokumentation individueller Lernprozesse. Wir schaffen Transparenz und Fokus für die bestmögliche Förderung Ihres Kindes.
           </p>
 
           <div className="pt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
               href="/auth/signin"
-              className="group flex items-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-bold text-lg shadow-lg shadow-indigo-600/20 transition-all hover:scale-105 active:scale-95"
+              className="group flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-bold text-lg shadow-xl transition-all hover:scale-[1.02] active:scale-95"
             >
-              Jetzt Anmelden / Login
+              Zum internen Bereich
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* Feature Cards Section */}
+        {/* Information Section for Parents */}
         <div className="max-w-6xl mx-auto w-full grid md:grid-cols-3 gap-8 mt-32 relative z-10 text-left">
           
-          {/* Card 1 */}
-          <div className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-              <ShieldCheck className="w-7 h-7" strokeWidth={2} />
+          {/* Info 1: Why? */}
+          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6">
+              <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Datenschutz</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Warum Dokumentation?</h3>
             <p className="text-slate-500 leading-relaxed text-sm">
-              Streng DSGVO-konform und sicher entwickelt für den Einsatz an deutschen Schulen. 
-              Deine Daten bleiben privat.
+              Um jedes Kind optimal zu fördern, halten wir Lernfortschritte und pädagogische Beobachtungen fest. Dies dient als fundierte Basis für Elterngespräche und die individuelle Lernplanung.
             </p>
           </div>
 
-          {/* Card 2 */}
-          <div className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-              <Zap className="w-7 h-7" strokeWidth={2} />
+          {/* Info 2: Privacy */}
+          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Effizienz</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Sicherheit & Privatsphäre</h3>
             <p className="text-slate-500 leading-relaxed text-sm">
-              Blitzschnelle Dokumentation von Lernfortschritten im Klassen- oder Einzelkontext. 
-              Mehr Zeit für das Unterrichten.
+              Sämtliche Daten werden nach höchsten Sicherheitsstandards verschlüsselt. Wir arbeiten streng DSGVO-konform, um die Privatsphäre Ihres Kindes und Ihrer Familie zu schützen.
             </p>
           </div>
 
-          {/* Card 3 */}
-          <div className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-              <Layers className="w-7 h-7" strokeWidth={2} />
+          {/* Info 3: Transparency */}
+          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-6">
+              <Zap className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">Übersicht</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Transparenz</h3>
             <p className="text-slate-500 leading-relaxed text-sm">
-              Alle Förderpläne, Berichte und pädagogischen Notizen an einem zentralen, interaktiven Ort gebündelt.
+              Durch die strukturierte Erfassung behalten Lehrkräfte und Schule den Überblick über die Entwicklungsschritte. So stellen wir sicher, dass kein Kind aus dem Blickfeld gerät.
             </p>
           </div>
 
+        </div>
+
+        {/* Compliance & Responsibility Info */}
+        <div className="max-w-4xl mx-auto mt-24 bg-slate-100/50 border border-slate-200 rounded-3xl p-8 text-center">
+          <div className="flex justify-center mb-4">
+             <ShieldCheck className="w-8 h-8 text-slate-400" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-900 mb-4">Datensicherheit & Verantwortung</h3>
+          <p className="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Sämtliche personenbezogenen Daten werden lokal auf der Infrastruktur der Schule gespeichert. 
+            Die Datenhoheit liegt vollständig beim Betreiber (der Schule). Zum Schutz der Privatsphäre 
+            werden Passwörter nach aktuellen Industriestandards gehasht. Die Absicherung der 
+            Datenübertragung (HTTPS) sowie der Schutz des Servers liegen im Verantwortungsbereich 
+            der bereitstellenden Institution.
+          </p>
         </div>
       </main>
 
       {/* Footer Minimal */}
       <footer className="py-8 text-center text-slate-400 text-sm border-t border-slate-200 bg-white">
-        &copy; {new Date().getFullYear()} ILE School Software. Alle Rechte vorbehalten.
+        &copy; {new Date().getFullYear()} Novum. Alle Rechte vorbehalten.
       </footer>
     </div>
   );

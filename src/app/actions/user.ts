@@ -18,20 +18,31 @@ export async function createUser(input: CreateUserInput) {
     return { error: parsed.error.issues.map((i) => i.message).join(", ") };
   }
 
-  const { name, email, role, managedClassIds } = parsed.data;
+  const { name, username, email, role, managedClassIds } = parsed.data;
 
   try {
-    // Prüfen ob Email schon existiert
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) {
-      return { error: "Ein Benutzer mit dieser E-Mail existiert bereits." };
+    // Prüfen ob Benutzername existiert
+    if (username) {
+      const existingUser = await prisma.user.findUnique({ where: { username } });
+      if (existingUser) {
+        return { error: "Dieser Benutzername ist bereits vergeben." };
+      }
     }
 
-    const passwordHash = bcrypt.hashSync("Start123!", 10);
+    // Prüfen ob Email schon existiert (nur falls angegeben)
+    if (email) {
+      const existingEmail = await prisma.user.findUnique({ where: { email } });
+      if (existingEmail) {
+        return { error: "Ein Benutzer mit dieser E-Mail existiert bereits." };
+      }
+    }
+
+    const passwordHash = await bcrypt.hash("Start123!", 10);
 
     const user = await prisma.user.create({
       data: {
         name,
+        username,
         email,
         role,
         passwordHash,
@@ -74,7 +85,7 @@ export async function resetUserPassword(userId: string) {
   await ensureAdmin();
 
   try {
-    const passwordHash = bcrypt.hashSync("Start123!", 10);
+    const passwordHash = await bcrypt.hash("Start123!", 10);
     await prisma.user.update({
       where: { id: userId },
       data: { passwordHash },

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function LoginPage() {
     try {
       console.log("Attempting login...");
       const res = await signIn("credentials", {
-        email,
+        username,
         password,
         redirect: false,
       });
@@ -27,7 +27,7 @@ export default function LoginPage() {
       console.log("Login result:", res);
 
       if (res?.error) {
-        setError("Ungültige Zugangsdaten. Bitte überprüfe E-Mail und Passwort.");
+        setError("Ungültige Zugangsdaten. Bitte überprüfe Benutzername und Passwort.");
       } else if (res?.ok) {
         console.log("Login successful, redirecting...");
         router.push("/dashboard");
@@ -45,21 +45,28 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-900">ILE Login</h2>
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-xl border border-gray-100">
+        <div className="flex flex-col items-center gap-4 mb-6">
+          <img 
+            src="/novum/Logo_full_Novum.png" 
+            alt="Novum Logo" 
+            className="h-12 w-auto mb-2"
+          />
+          <h2 className="text-2xl font-bold text-center text-gray-900 tracking-tight">Anmelden bei Novum</h2>
+        </div>
         
         {error && <p className="text-sm text-red-600 bg-red-50 p-2 rounded">{error}</p>}
         
         <form onSubmit={handleLocalLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-gray-700">Benutzername</label>
             <input 
-              type="email" 
+              type="text" 
               required
-              autoComplete="email"
+              autoComplete="username"
               className="w-full px-3 py-2 mt-1 border rounded-md text-black"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div>

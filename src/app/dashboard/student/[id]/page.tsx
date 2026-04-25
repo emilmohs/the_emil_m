@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import CompetenceAccordion from "./CompetenceAccordion";
-import { decryptContent } from "@/lib/encryption";
 import PrintExport from "./PrintExport";
 import { getGradeCriteria } from "@/app/actions/criteria";
 import { getTagColor } from "@/lib/colors";
@@ -56,6 +55,9 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
         orderBy: { createdAt: "desc" }
       },
       assessments: {
+        orderBy: { createdAt: "desc" }
+      },
+      notes: {
         orderBy: { createdAt: "desc" }
       }
     }
@@ -140,25 +142,21 @@ export default async function StudentDetailPage({ params }: { params: Promise<{ 
         </div>
 
         <div className="space-y-12 max-w-4xl mx-auto">
-          {/* Main Content Area: Logs, Assessments & ILE */}
-          <div className="space-y-8 w-full">
-            
-            <PrintExport 
-              student={{ id: student.id, firstName: student.firstName, lastName: student.lastName, classId: student.classId }} 
-              teacherName={(session.user as any)?.name || "Unbekannt"} 
-              assessments={student.assessments} 
-              availableQuarters={allQuarters.map((q: any) => q.id)}
-            />
+          <PrintExport 
+            student={{ id: student.id, firstName: student.firstName, lastName: student.lastName, classId: student.classId }} 
+            teacherName={(session.user as any)?.name || "Unbekannt"} 
+            assessments={student.assessments} 
+            availableQuarters={allQuarters.map((q: any) => q.id)}
+          />
 
-            <CompetenceAccordion 
-              studentId={student.id} 
-              nextStudentId={nextStudentId} 
-              initialAssessments={student.assessments}
-              competences={competences}
-              defaultQuarter={currentQuarter}
-              availableQuarters={allQuarters.map((q: any) => q.id)}
-            />
-          </div>
+          <CompetenceAccordion 
+            studentId={student.id} 
+            nextStudentId={nextStudentId} 
+            initialAssessments={student.assessments}
+            competences={competences}
+            defaultQuarter={currentQuarter}
+            availableQuarters={allQuarters.map((q: any) => q.id)}
+          />
         </div>
       </main>
     </div>

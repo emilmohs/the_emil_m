@@ -22,12 +22,12 @@ export async function changePassword(currentPassword: string, newPassword: strin
     return { error: "Benutzer nicht gefunden." };
   }
 
-  const isValid = bcrypt.compareSync(currentPassword, user.passwordHash);
+  const isValid = await bcrypt.compare(currentPassword, user.passwordHash);
   if (!isValid) {
     return { error: "Das aktuelle Passwort ist falsch." };
   }
 
-  const newHash = bcrypt.hashSync(newPassword, 10);
+  const newHash = await bcrypt.hash(newPassword, 10);
   await prisma.user.update({
     where: { id: userId },
     data: { passwordHash: newHash }

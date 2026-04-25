@@ -110,3 +110,47 @@ export async function upsertAssessment(
     return { error: "Serverfehler beim Speichern" };
   }
 }
+
+/**
+ * Server Action: Löscht eine Leistungsbewertung.
+ */
+export async function deleteAssessment(
+  studentId: string, 
+  categoryStr: string, 
+  quarter: string = "Q2_2026"
+) {
+  const session = await getServerSession(authOptions);
+  
+  if (!session || !session.user || !(session.user as any).id) {
+    throw new Error("Nicht autorisiert");
+  }
+
+  const teacherId = (session.user as any).id;
+
+  try {
+    const existing = await prisma.assessment.findFirst({
+      where: {
+        studentId,
+        category: categoryStr,
+        quarter
+      }
+    });
+
+    if (existing) {
+      // Check permission if not ADMIN
+      if ((session.user as any).role !== "ADMIN" && existing.teacherId !== teacherId) {
+        // Optionale Prüfung: Darf nur der Ersteller löschen? 
+        // Für Novum: Jeder mit Zugriff auf den Schüler darf löschen (entspricht upsert)
+      }
+
+      await prisma.assessment.delete({
+        where: { id: existing.id }
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Fehler beim Löschen des Assessments:", error);
+    return { error: "Serverfehler beim Löschen" };
+  }
+}

@@ -49,7 +49,7 @@ export default async function AdminPage({
             </div>
           </div>
           <a 
-            href="/ile/dashboard"
+            href="/novum/dashboard"
             className="px-5 py-2.5 text-sm font-bold text-gray-600 hover:text-gray-900 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all"
           >
             Zurück zum Dashboard

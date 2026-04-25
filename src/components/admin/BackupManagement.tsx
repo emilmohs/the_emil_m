@@ -169,7 +169,7 @@ export default function BackupManagement() {
                         Restore
                       </button>
                       <a 
-                        href={`/ile/api/admin/backups/${b.name}`}
+                        href={`/novum/api/admin/backups/${b.name}`}
                         className="p-2.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all"
                         title="Herunterladen"
                       >

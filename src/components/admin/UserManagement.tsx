@@ -19,12 +19,13 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
   async function handleCreateUser(formData: FormData) {
     setError("");
     const name = formData.get("name") as string;
+    const username = formData.get("username") as string;
     const email = formData.get("email") as string;
     const role = formData.get("role") as any;
     const managedClassIds = formData.getAll("classes") as string[];
 
     startTransition(async () => {
-      const res = await createUser({ name, email, role, managedClassIds });
+      const res = await createUser({ name, username, email, role, managedClassIds });
       if (res.error) {
         setError(res.error);
       } else {
@@ -108,7 +109,10 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
               <div>
                 <h2 className="text-3xl font-black text-gray-900 tracking-tight">{selectedUser.name}</h2>
                 <div className="flex flex-col gap-1 mb-4">
-                  <p className="text-gray-500 font-medium">{selectedUser.email}</p>
+                  <p className="text-gray-500 font-medium">
+                    {selectedUser.username && <span className="text-gray-900 font-bold">@{selectedUser.username}</span>}
+                    {selectedUser.email && <span className="ml-2 text-gray-400">({selectedUser.email})</span>}
+                  </p>
                   <p className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-1 rounded fit-content inline-flex items-center gap-2 max-w-max">
                     Initial-Passwort: <strong className="font-mono text-gray-700 tracking-widest">Start123!</strong>
                   </p>
@@ -212,8 +216,13 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">E-Mail Adresse</label>
-                <input name="email" type="email" required placeholder="lehrer@schule.de" className="w-full bg-white border-2 border-gray-100 focus:border-blue-500 rounded-2xl px-5 py-3.5 text-gray-900 font-medium outline-none transition-all shadow-sm" />
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Benutzername</label>
+                <input name="username" required placeholder="z.B. mmeyer" className="w-full bg-white border-2 border-gray-100 focus:border-blue-500 rounded-2xl px-5 py-3.5 text-gray-900 font-medium outline-none transition-all shadow-sm" />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">E-Mail Adresse (Optional)</label>
+                <input name="email" type="email" placeholder="lehrer@schule.de" className="w-full bg-white border-2 border-gray-100 focus:border-blue-500 rounded-2xl px-5 py-3.5 text-gray-900 font-medium outline-none transition-all shadow-sm" />
               </div>
 
               <div>

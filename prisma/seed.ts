@@ -22,14 +22,16 @@ function encryptForSeed(text: string): string {
 async function main() {
   // 1. Admin-User anlegen
   const admin = await prisma.user.upsert({
-    where: { email: 'admin' },
+    where: { username: 'admin' },
     update: {
-      passwordHash: bcrypt.hashSync('admin', 10),
+      email: 'admin@schule.test',
+      passwordHash: await bcrypt.hash('admin', 10),
     },
     create: {
       name: 'System Admin',
-      email: 'admin',
-      passwordHash: bcrypt.hashSync('admin', 10),
+      username: 'admin',
+      email: 'admin@schule.test',
+      passwordHash: await bcrypt.hash('admin', 10),
       role: 'ADMIN',
     },
   })
@@ -46,12 +48,13 @@ async function main() {
 
   // 3. Lehrer anlegen
   const teacher = await prisma.user.upsert({
-    where: { email: 'lehrer@schule.test' },
+    where: { username: 'lehrer1' },
     update: {},
     create: {
       name: 'Max Mustermann',
+      username: 'lehrer1',
       email: 'lehrer@schule.test',
-      passwordHash: bcrypt.hashSync('testpasswort123', 10),
+      passwordHash: await bcrypt.hash('testpasswort123', 10),
       role: 'TEACHER',
     },
   })
@@ -132,8 +135,8 @@ async function main() {
   );
 
   console.log('✅ Seed abgeschlossen!')
-  console.log(`   Admin: admin@schule.test / testpasswort123`)
-  console.log(`   Lehrer: lehrer@schule.test / testpasswort123`)
+  console.log(`   Admin:  Benutzername: admin   / Passwort: admin`)
+  console.log(`   Lehrer: Benutzername: lehrer1 / Passwort: testpasswort123`)
   console.log(`   Schüler: ${schueler1.firstName} ${schueler1.lastName}, ${schueler2.firstName} ${schueler2.lastName}`)
 }
 

@@ -151,60 +151,60 @@ export default function PrintExport({
 
   return (
     <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 flex flex-col gap-6">
-      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 border-b border-gray-100 pb-4">
+      <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 border-b border-gray-100 pb-4">
         <div>
           <h3 className="text-lg font-bold text-gray-900">Export & Drucken</h3>
-          <p className="text-sm text-gray-500">Generiere Berichte oder vergleiche Quartale.</p>
+          <p className="text-xs text-gray-500">Generiere Berichte oder vergleiche Quartale.</p>
         </div>
         
-        <div className="flex bg-gray-100 rounded-xl p-1">
+        <div className="flex bg-gray-100 rounded-xl p-1 w-fit">
           <button 
             onClick={() => setExportMode("single")}
-            className={`px-4 py-1.5 text-sm font-bold rounded-lg transition-all ${exportMode === "single" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "single" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
             Einzel-Quartal
           </button>
           <button 
             onClick={() => setExportMode("compare")}
-            className={`px-4 py-1.5 text-sm font-bold rounded-lg transition-all ${exportMode === "compare" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${exportMode === "compare" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
           >
-            Quartals-Vergleich
+            Vergleich
           </button>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="flex flex-col gap-4">
         {exportMode === "single" ? (
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <span className="text-sm font-bold text-gray-700">Zu exportierendes Quartal:</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-bold text-gray-400 uppercase">Quartal:</span>
             <select 
               value={singleQuarter} 
               onChange={e => setSingleQuarter(e.target.value)}
-              className="border border-gray-200 rounded-xl px-3 py-1.5 text-sm font-bold bg-gray-50"
+              className="border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold bg-gray-50"
             >
               {quarters.map(q => <option key={q} value={q}>{q.replace('_', ' ')}</option>)}
             </select>
           </div>
         ) : (
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <select value={compareQ1} onChange={e => setCompareQ1(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-1.5 text-sm font-bold bg-gray-50 text-center">
+          <div className="flex flex-wrap items-center gap-2">
+            <select value={compareQ1} onChange={e => setCompareQ1(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold bg-gray-50">
               {quarters.map(q => <option key={q} value={q}>{q.replace('_', ' ')}</option>)}
             </select>
-            <span className="text-gray-400 font-bold">vs.</span>
-            <select value={compareQ2} onChange={e => setCompareQ2(e.target.value)} className="border border-gray-200 rounded-xl px-3 py-1.5 text-sm font-bold bg-gray-50 text-center">
+            <span className="text-gray-400 font-bold text-xs">vs.</span>
+            <select value={compareQ2} onChange={e => setCompareQ2(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-1 text-xs font-bold bg-gray-50">
               {quarters.map(q => <option key={q} value={q}>{q.replace('_', ' ')}</option>)}
             </select>
           </div>
         )}
 
         {exportMode === "single" ? (
-          <div className="flex gap-3 w-full md:w-auto">
-            <button onClick={() => handlePrint("full")} className="flex-1 md:flex-none px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-bold text-sm">Ganzes Profil</button>
-            <button onClick={() => handlePrint("intervention")} className="flex-1 md:flex-none px-5 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-xl font-bold text-sm">Förderbericht</button>
+          <div className="grid grid-cols-2 gap-2">
+            <button onClick={() => handlePrint("full")} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-bold text-xs transition-colors">Voll-Profil</button>
+            <button onClick={() => handlePrint("intervention")} className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 rounded-xl font-bold text-xs transition-colors">Förderung</button>
           </div>
         ) : (
-          <button onClick={() => handlePrint("full")} className="w-full md:w-auto px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-sm shadow-md transition-colors">
-            Vergleich Drucken
+          <button onClick={() => handlePrint("full")} className="w-full px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs shadow-md transition-colors">
+            Bericht drucken
           </button>
         )}
       </div>

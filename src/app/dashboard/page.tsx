@@ -104,11 +104,14 @@ export default async function DashboardPage() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-            I
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900 tracking-tight">ILE Schulverwaltung</h1>
+          <img 
+            src="/novum/Logo_full_Novum.png" 
+            alt="Novum Logo" 
+            className="h-10 w-auto"
+          />
+          <div className="hidden sm:block h-6 w-px bg-gray-200 mx-1" />
+          <div className="hidden sm:block">
+            <h1 className="text-xl font-bold text-gray-900 tracking-tight">Novum</h1>
             <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">
               {isAdmin ? "Admin-Konsole" : "Lehrer-Dashboard"}
             </p>
@@ -167,7 +170,7 @@ export default async function DashboardPage() {
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 -mr-8 -mt-8 rounded-full group-hover:bg-blue-100 transition-colors" />
                 <h3 className="text-lg font-bold text-gray-900 mb-1 relative underline decoration-blue-500/30 group-hover:decoration-blue-500">Bewertungskriterien</h3>
-                <p className="text-sm text-gray-500 relative">ILE-Kompetenzen pro Klassenstufe anpassen.</p>
+                <p className="text-sm text-gray-500 relative">Novum-Kompetenzen pro Klassenstufe anpassen.</p>
               </Link>
             </div>
           </section>

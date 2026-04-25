@@ -57,7 +57,8 @@ export type CreateStudentInput = z.infer<typeof createStudentSchema>;
 
 export const createUserSchema = z.object({
   name: z.string().min(2, "Name muss mindestens 2 Zeichen lang sein"),
-  email: z.string().email("Ungültige E-Mail-Adresse"),
+  username: z.string().min(3, "Benutzername muss mindestens 3 Zeichen lang sein"),
+  email: z.string().email("Ungültige E-Mail-Adresse").optional(),
   role: z.enum(["ADMIN", "TEACHER"]),
   managedClassIds: z.array(z.string()).optional(),
 });
