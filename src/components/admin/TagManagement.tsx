@@ -48,7 +48,7 @@ export default function TagManagement({ tags }: TagManagementProps) {
   }
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 animate-in fade-in duration-500">
       <div className="lg:col-span-1 bg-white p-6 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden h-fit">
         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 -mr-8 -mt-8 rounded-full" />
         <h3 className="text-xl font-black text-gray-900 mb-2 relative">Neuen Tag erstellen</h3>
@@ -81,7 +81,7 @@ export default function TagManagement({ tags }: TagManagementProps) {
         </form>
       </div>
 
-      <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-200 shadow-sm p-8 min-h-[500px]">
+      <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-200 shadow-sm p-5 md:p-8 min-h-[400px] md:min-h-[500px] overflow-x-auto">
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">Verfügbare Tags</h2>

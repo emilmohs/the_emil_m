@@ -55,7 +55,7 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
   return (
     <div className="flex flex-col md:flex-row gap-6 animate-in fade-in duration-500">
       {/* LINKE SPALTE: LEHRER-LISTE */}
-      <div className="w-full md:w-1/3 bg-white border border-gray-200 rounded-3xl p-6 shadow-sm flex flex-col min-h-[600px] h-[75vh]">
+      <div className="w-full md:w-1/3 bg-white border border-gray-200 rounded-3xl p-4 md:p-6 shadow-sm flex flex-col min-h-[400px] md:min-h-[600px] h-auto md:h-[75vh]">
         <button 
           onClick={() => setShowModal(true)}
           className="w-full py-3 mb-6 bg-gray-900 text-white font-bold rounded-2xl hover:bg-gray-800 shadow-xl shadow-gray-200 transition-all flex items-center justify-center gap-2"
@@ -95,7 +95,7 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
       </div>
 
       {/* RECHTE SPALTE: DETAILS UND MATRIX */}
-      <div className="w-full md:w-2/3 bg-white border border-gray-200 rounded-3xl p-8 shadow-sm min-h-[600px] flex flex-col relative overflow-hidden">
+      <div className="w-full md:w-2/3 bg-white border border-gray-200 rounded-3xl p-5 md:p-8 shadow-sm min-h-[400px] md:min-h-[600px] flex flex-col relative overflow-hidden">
         {!selectedUser ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-gray-400">
             <svg className="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
@@ -105,11 +105,11 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
           <>
             <div className={`absolute top-0 right-0 w-64 h-64 -mr-20 -mt-20 rounded-full transition-colors ${selectedUser.isActive ? "bg-blue-50" : "bg-red-50"}`} />
             
-            <div className="relative z-10 flex justify-between items-start mb-10 pb-8 border-b border-gray-100">
+            <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start mb-6 md:mb-10 pb-6 md:pb-8 border-b border-gray-100 gap-4">
               <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight">{selectedUser.name}</h2>
+                <h2 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight leading-tight">{selectedUser.name}</h2>
                 <div className="flex flex-col gap-1 mb-4">
-                  <p className="text-gray-500 font-medium">
+                  <p className="text-sm text-gray-500 font-medium break-all">
                     {selectedUser.username && <span className="text-gray-900 font-bold">@{selectedUser.username}</span>}
                     {selectedUser.email && <span className="ml-2 text-gray-400">({selectedUser.email})</span>}
                   </p>
@@ -132,7 +132,7 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 items-end">
+              <div className="flex flex-row sm:flex-col gap-2 items-end w-full sm:w-auto">
                 <button 
                   onClick={() => {
                     if(confirm("Möchtest du das Passwort dieses Benutzers auf 'Start123!' zurücksetzen?")) {
@@ -144,20 +144,20 @@ export default function UserManagement({ users, allClasses }: UserManagementProp
                     }
                   }}
                   disabled={isPending}
-                  className="px-4 py-2 text-sm font-bold rounded-xl transition-all shadow-sm disabled:opacity-50 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                  className="flex-1 sm:flex-none px-4 py-2 text-xs md:text-sm font-bold rounded-xl transition-all shadow-sm disabled:opacity-50 bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
                 >
-                  Passwort zurücksetzen
+                  Reset
                 </button>
                 <button 
                   onClick={() => startTransition(() => { toggleUserStatus(selectedUser.id, !selectedUser.isActive) })}
                   disabled={isPending}
-                  className={`px-4 py-2 text-sm font-bold rounded-xl transition-all shadow-sm disabled:opacity-50 ${
+                  className={`flex-1 sm:flex-none px-4 py-2 text-xs md:text-sm font-bold rounded-xl transition-all shadow-sm disabled:opacity-50 ${
                     selectedUser.isActive 
                       ? "bg-red-50 text-red-600 hover:bg-red-100 border border-red-100" 
                       : "bg-green-50 text-green-600 hover:bg-green-100 border border-green-100"
                   }`}
                 >
-                  {selectedUser.isActive ? "Account sperren" : "Account aktivieren"}
+                  {selectedUser.isActive ? "Sperren" : "Aktivieren"}
                 </button>
               </div>
             </div>

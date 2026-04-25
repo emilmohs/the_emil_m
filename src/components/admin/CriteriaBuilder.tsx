@@ -114,28 +114,28 @@ export default function CriteriaBuilder({
   return (
     <div className="space-y-6">
       {/* Grade Selector */}
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+      <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 bg-white p-4 md:p-5 rounded-2xl border border-gray-200 shadow-sm">
         <div>
-          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h3 className="text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2">
             <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">🏗️</span>
             Kriterien-Builder
           </h3>
-          <p className="text-sm text-gray-500 mt-1">Bewertungskriterien pro Klassenstufe anpassen</p>
+          <p className="text-xs md:text-sm text-gray-500 mt-1">Stufenweise Kriterien anpassen</p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-bold text-gray-600">Klassenstufe:</span>
-          <div className="flex bg-gray-100 rounded-xl p-1">
+        <div className="flex items-center gap-3 w-full lg:w-auto overflow-x-auto no-scrollbar pb-1">
+          <span className="text-xs md:text-sm font-bold text-gray-600 shrink-0">Stufe:</span>
+          <div className="flex bg-gray-100 rounded-xl p-1 shrink-0">
             {GRADE_LEVELS.map(g => (
               <button
                 key={g}
                 onClick={() => setActiveGrade(g)}
-                className={`px-5 py-2 text-sm font-bold rounded-lg transition-all ${
+                className={`px-4 sm:px-5 py-2 text-xs md:text-sm font-bold rounded-lg transition-all ${
                   activeGrade === g
                     ? "bg-white text-blue-700 shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
-                Klasse {g}
+                Kl. {g}
               </button>
             ))}
           </div>
@@ -237,20 +237,20 @@ export default function CriteriaBuilder({
       </div>
 
       {/* Save Bar */}
-      <div className="sticky bottom-4 bg-white rounded-2xl border border-gray-200 shadow-lg p-4 flex justify-between items-center">
-        <p className="text-sm text-gray-500 font-medium">
+      <div className="sticky bottom-4 bg-white rounded-2xl border border-gray-200 shadow-lg p-3 md:p-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <p className="text-xs md:text-sm text-gray-500 font-medium text-center sm:text-left">
           {saved ? (
-            <span className="text-green-600 font-bold">✓ Erfolgreich gespeichert!</span>
+            <span className="text-green-600 font-bold">✓ Gespeichert!</span>
           ) : (
-            <>Änderungen an <strong>Klassenstufe {activeGrade}</strong> vornehmen und speichern.</>
+            <>Änderungen <strong>Stufe {activeGrade}</strong> speichern.</>
           )}
         </p>
         <button
           onClick={handleSave}
           disabled={isPending}
-          className="px-8 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-blue-500/30 active:scale-95 disabled:opacity-50"
+          className="w-full sm:w-auto px-8 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs md:text-sm transition-all shadow-md hover:shadow-blue-500/30 active:scale-95 disabled:opacity-50"
         >
-          {isPending ? "Speichert…" : "Für Klasse " + activeGrade + " speichern"}
+          {isPending ? "Lädt…" : "Speichern"}
         </button>
       </div>
     </div>

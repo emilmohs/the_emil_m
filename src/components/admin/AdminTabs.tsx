@@ -26,21 +26,21 @@ export default function AdminTabs({ activeTab }: { activeTab: string }) {
   ];
 
   return (
-    <div className="flex gap-8 border-b border-gray-200 mb-8">
+    <div className="flex gap-4 md:gap-8 border-b border-gray-200 mb-8 overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth px-1">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         return (
           <Link
             key={tab.id}
             href={`/admin?tab=${tab.id}`}
-            className={`flex items-center gap-3 pb-4 px-2 text-lg font-bold transition-all border-b-4 ${
+            className={`flex items-center gap-2 md:gap-3 pb-3 md:pb-4 px-1 md:px-2 text-base md:text-lg font-bold transition-all border-b-4 shrink-0 ${
               isActive 
                 ? "border-blue-600 text-blue-600" 
                 : "border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300"
             }`}
           >
-            {tab.icon}
-            {tab.label}
+            <span className="shrink-0">{tab.icon}</span>
+            <span className="inline-block">{tab.label}</span>
           </Link>
         );
       })}

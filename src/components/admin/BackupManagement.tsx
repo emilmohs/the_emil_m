@@ -85,8 +85,8 @@ export default function BackupManagement() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-20">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col justify-between bg-white p-8 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div className="flex flex-col justify-between bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 -mr-12 -mt-12 rounded-full" />
           <div className="relative">
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">Snapshot erstellen</h2>
@@ -102,7 +102,7 @@ export default function BackupManagement() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between bg-white p-8 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden">
+        <div className="flex flex-col justify-between bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 -mr-12 -mt-12 rounded-full" />
           <div className="relative">
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">Backup einspielen</h2>
@@ -127,11 +127,12 @@ export default function BackupManagement() {
       </div>
 
       <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="px-6 md:px-8 py-4 md:py-6 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-black text-gray-900">Vorhandene Snapshots</h3>
-          <span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-500">Max. 10 Dateien</span>
+          <span className="px-3 py-1 bg-gray-100 rounded-full text-[10px] font-bold text-gray-500 uppercase">Max. 10</span>
         </div>
-        <table className="w-full text-left">
+        <div className="overflow-x-auto no-scrollbar">
+          <table className="w-full text-left min-w-[600px]">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-100 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
               <th className="px-8 py-4">Zeitpunkt</th>
@@ -191,6 +192,7 @@ export default function BackupManagement() {
           </tbody>
         </table>
       </div>
+    </div>
 
       <div className="bg-amber-50 border border-amber-200 p-6 rounded-3xl flex items-start gap-4">
         <div className="p-2 bg-amber-100 rounded-xl text-amber-600">
